@@ -1,0 +1,135 @@
+{
+  "active": true,
+  "hubId": "network-sniffer",
+  "name": "Network Sniffer",
+  "schema": "skill-1.0.0",
+  "version": "1.0.0",
+  "description": "Advanced network packet sniffer for macOS built on the Wireshark CLI (tshark). For AUTHORIZED network analysis only. Lists capture interfaces; captures live traffic to pcap files; filters by IP or domain; performs a full-network scan with protocol hierarchy, conversations and top talkers; extracts contacted domains (DNS/TLS SNI/HTTP Host); searches packet payloads; extracts cleartext credentials; runs a PII/secrets DLP scan; follows TCP streams and carves transferred files; lists HTTP transactions; surfaces TLS/cert intel; runs threat-detection heuristics (port scans, ARP anomalies, plaintext auth, beaconing); matches traffic against an IOC list; and analyzes existing pcap files. Passive capture/analysis only — no injection, spoofing or active attacks. Requires tshark (brew install --cask wireshark).",
+  "author": "custom",
+  "license": "MIT",
+  "setup_args": {},
+  "examples": [
+    {
+      "prompt": "List my network capture interfaces",
+      "call": "{\"action\": \"interfaces\", \"interface\": \"\", \"target\": \"\", \"duration\": 0, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"\"}"
+    },
+    {
+      "prompt": "Capture 200 packets on en0",
+      "call": "{\"action\": \"capture\", \"interface\": \"en0\", \"target\": \"\", \"duration\": 0, \"packetCount\": 200, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"\"}"
+    },
+    {
+      "prompt": "Capture all traffic to and from example.com for 30 seconds",
+      "call": "{\"action\": \"target\", \"interface\": \"\", \"target\": \"example.com\", \"duration\": 30, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"\"}"
+    },
+    {
+      "prompt": "Run a full network scan for 60 seconds",
+      "call": "{\"action\": \"scan\", \"interface\": \"\", \"target\": \"\", \"duration\": 60, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"\"}"
+    },
+    {
+      "prompt": "Which domains is my machine contacting?",
+      "call": "{\"action\": \"domains\", \"interface\": \"\", \"target\": \"\", \"duration\": 30, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"\"}"
+    },
+    {
+      "prompt": "Search captured traffic for the word password",
+      "call": "{\"action\": \"search\", \"interface\": \"\", \"target\": \"\", \"duration\": 30, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"password\", \"pcapFile\": \"\"}"
+    },
+    {
+      "prompt": "Look for cleartext credentials on the network",
+      "call": "{\"action\": \"credentials\", \"interface\": \"\", \"target\": \"\", \"duration\": 30, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"\"}"
+    },
+    {
+      "prompt": "Scan the network for passwords, personal data and other sensitive information",
+      "call": "{\"action\": \"sensitive\", \"interface\": \"\", \"target\": \"\", \"duration\": 30, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"\"}"
+    },
+    {
+      "prompt": "Analyze the capture file at /tmp/dump.pcap",
+      "call": "{\"action\": \"analyze\", \"interface\": \"\", \"target\": \"\", \"duration\": 0, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"/tmp/dump.pcap\"}"
+    },
+    {
+      "prompt": "List the HTTP requests and responses in /tmp/dump.pcap",
+      "call": "{\"action\": \"http\", \"interface\": \"\", \"target\": \"\", \"duration\": 0, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"/tmp/dump.pcap\"}"
+    },
+    {
+      "prompt": "Show TLS certificates and weak protocol versions for 60 seconds",
+      "call": "{\"action\": \"tls\", \"interface\": \"\", \"target\": \"\", \"duration\": 60, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"\"}"
+    },
+    {
+      "prompt": "Run threat-detection heuristics on /tmp/dump.pcap",
+      "call": "{\"action\": \"threats\", \"interface\": \"\", \"target\": \"\", \"duration\": 0, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"/tmp/dump.pcap\"}"
+    },
+    {
+      "prompt": "Carve the HTTP files transferred in /tmp/dump.pcap",
+      "call": "{\"action\": \"follow\", \"extract\": \"http\", \"interface\": \"\", \"target\": \"\", \"duration\": 0, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"/tmp/dump.pcap\"}"
+    },
+    {
+      "prompt": "Follow TCP stream 3 in /tmp/dump.pcap",
+      "call": "{\"action\": \"follow\", \"streamIndex\": 3, \"interface\": \"\", \"target\": \"\", \"duration\": 0, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"/tmp/dump.pcap\"}"
+    },
+    {
+      "prompt": "Match /tmp/dump.pcap against my indicators in /tmp/iocs.txt",
+      "call": "{\"action\": \"ioc\", \"iocFile\": \"/tmp/iocs.txt\", \"interface\": \"\", \"target\": \"\", \"duration\": 0, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"/tmp/dump.pcap\"}"
+    },
+    {
+      "prompt": "Delete temporary capture files",
+      "call": "{\"action\": \"cleanup\", \"interface\": \"\", \"target\": \"\", \"duration\": 0, \"packetCount\": 0, \"captureFilter\": \"\", \"displayFilter\": \"\", \"searchTerm\": \"\", \"pcapFile\": \"\"}"
+    }
+  ],
+  "entrypoint": {
+    "file": "handler.js",
+    "params": {
+      "action": {
+        "description": "Action to perform: 'interfaces' (list capture interfaces), 'capture' (live capture to a pcap file), 'target' (capture/filter traffic for a specific IP or domain), 'scan' (full-network scan with protocol hierarchy, conversations and top talkers), 'domains' (extract contacted domains from DNS/TLS SNI/HTTP), 'search' (search payloads for a string or display filter), 'credentials' (extract cleartext credentials), 'sensitive' (PII/secrets DLP scan), 'analyze' (analyze an existing pcap file), 'http' (list HTTP transactions), 'tls' (TLS/certificate intel and weak-protocol flags), 'threats' (heuristic detection: port scans, ARP anomalies, plaintext auth, beaconing), 'follow' (follow a TCP stream or carve transferred files via 'extract'), 'ioc' (match traffic against an indicator list in 'iocFile'), 'cleanup' (delete temporary captures and carved objects)",
+        "type": "string"
+      },
+      "interface": {
+        "description": "Network interface to capture on, e.g. 'en0'. Optional; if empty tshark picks the first non-loopback interface. Use action 'interfaces' to list valid names.",
+        "type": "string"
+      },
+      "target": {
+        "description": "An IP address or domain name to capture/filter. Required for action 'target'. Domains are resolved to their IPs and matched in both directions.",
+        "type": "string"
+      },
+      "duration": {
+        "description": "Live capture duration in seconds. Defaults to 60 when neither duration nor packetCount is set. Hard maximum 600.",
+        "type": "number"
+      },
+      "packetCount": {
+        "description": "Maximum number of packets to capture. Defaults to 5000 when neither duration nor packetCount is set. Hard maximum 200000.",
+        "type": "number"
+      },
+      "captureFilter": {
+        "description": "Optional libpcap/BPF capture filter, e.g. 'tcp port 80' or 'host 1.2.3.4'. Applied at capture time.",
+        "type": "string"
+      },
+      "displayFilter": {
+        "description": "Optional Wireshark display filter, e.g. 'http' or 'dns.qry.name contains example'. Applied when reading packets.",
+        "type": "string"
+      },
+      "searchTerm": {
+        "description": "Substring to search for inside packet payloads (used by action 'search'; optional extra filter for 'sensitive').",
+        "type": "string"
+      },
+      "pcapFile": {
+        "description": "Path to a pcap/pcapng file. For 'analyze' it is the file to read. For other actions, supplying it reads from this file instead of capturing live; supplying it on a capturing action writes the capture to this path.",
+        "type": "string"
+      },
+      "streamIndex": {
+        "description": "TCP stream index to follow (action 'follow'). If omitted, the first stream matching searchTerm/displayFilter is followed.",
+        "type": "number"
+      },
+      "extract": {
+        "description": "For action 'follow': protocol whose transferred objects/files should be carved out of the capture. One of 'http', 'smb', 'smb2', 'tftp', 'imf', 'dicom'. Files are written to a temp dir; run 'cleanup' to remove them.",
+        "type": "string"
+      },
+      "iocFile": {
+        "description": "Path to a newline-separated list of indicators (IPs and/or domains; '#' lines ignored). Required for action 'ioc'.",
+        "type": "string"
+      },
+      "outputFormat": {
+        "description": "Output format for list-style actions (search, http, tls, domains, ioc): 'json' (default), 'csv', or 'ndjson'. CSV/NDJSON emit flat rows suitable for SIEM import.",
+        "type": "string"
+      }
+    }
+  },
+  "imported": true
+}

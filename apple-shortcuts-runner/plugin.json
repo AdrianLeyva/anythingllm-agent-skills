@@ -1,0 +1,63 @@
+{
+  "active": true,
+  "hubId": "apple-shortcuts-runner",
+  "name": "Apple Shortcuts Runner",
+  "schema": "skill-1.0.0",
+  "version": "1.0.0",
+  "description": "Finds and triggers macOS Apple Shortcuts entirely from the command line — no UI interaction. Lists installed shortcuts, searches them by name, and runs a shortcut by name with optional text/file input and captured output. Uses the built-in 'shortcuts' CLI (macOS 12+) and automatically falls back to AppleScript (osascript) when the CLI is unavailable.",
+  "author": "custom",
+  "license": "MIT",
+  "setup_args": {},
+  "examples": [
+    {
+      "prompt": "List my Apple Shortcuts",
+      "call": "{\"action\": \"list\", \"name\": \"\", \"query\": \"\", \"input\": \"\", \"inputPath\": \"\", \"outputPath\": \"\"}"
+    },
+    {
+      "prompt": "Find shortcuts with 'note' in the name",
+      "call": "{\"action\": \"find\", \"name\": \"\", \"query\": \"note\", \"input\": \"\", \"inputPath\": \"\", \"outputPath\": \"\"}"
+    },
+    {
+      "prompt": "Run the shortcut called 'Good Morning'",
+      "call": "{\"action\": \"run\", \"name\": \"Good Morning\", \"query\": \"\", \"input\": \"\", \"inputPath\": \"\", \"outputPath\": \"\"}"
+    },
+    {
+      "prompt": "Run the 'Add to Inbox' shortcut with the input 'Buy milk'",
+      "call": "{\"action\": \"run\", \"name\": \"Add to Inbox\", \"query\": \"\", \"input\": \"Buy milk\", \"inputPath\": \"\", \"outputPath\": \"\"}"
+    },
+    {
+      "prompt": "Run 'Resize Image' on the file at /tmp/photo.jpg and save the result to /tmp/out.jpg",
+      "call": "{\"action\": \"run\", \"name\": \"Resize Image\", \"query\": \"\", \"input\": \"\", \"inputPath\": \"/tmp/photo.jpg\", \"outputPath\": \"/tmp/out.jpg\"}"
+    }
+  ],
+  "entrypoint": {
+    "file": "handler.js",
+    "params": {
+      "action": {
+        "description": "Action to perform: 'list' (list all installed shortcuts), 'find' (filter shortcuts whose name contains 'query'), or 'run' (trigger a shortcut by 'name').",
+        "type": "string"
+      },
+      "name": {
+        "description": "Exact name of the shortcut to run. Required for action 'run'. If the name is not found, the skill returns close-matching suggestions instead of running anything.",
+        "type": "string"
+      },
+      "query": {
+        "description": "Case-insensitive substring to match against shortcut names. Required for action 'find'.",
+        "type": "string"
+      },
+      "input": {
+        "description": "Optional text passed as input to the shortcut (action 'run'). Mutually exclusive with 'inputPath'; if both are given, 'inputPath' wins.",
+        "type": "string"
+      },
+      "inputPath": {
+        "description": "Optional path to a file passed as input to the shortcut (action 'run'). Takes precedence over 'input'. CLI engine only.",
+        "type": "string"
+      },
+      "outputPath": {
+        "description": "Optional path to write the shortcut's output to (action 'run'). If omitted, output is written to a temp file and returned inline. CLI engine only.",
+        "type": "string"
+      }
+    }
+  },
+  "imported": true
+}

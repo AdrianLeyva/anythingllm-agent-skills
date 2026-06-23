@@ -1,0 +1,87 @@
+{
+  "active": true,
+  "hubId": "apple-reminders",
+  "name": "Apple Reminders",
+  "schema": "skill-1.0.0",
+  "version": "1.0.0",
+  "description": "Read, create, edit, and delete Apple Reminders on macOS entirely from the command line — no UI interaction. Lists your reminder lists, gets reminders (optionally filtered by list and completion status), creates new reminders with notes/due date/priority, edits existing ones (rename, change notes/due/priority, mark complete), and deletes them. Targets the built-in Reminders app via AppleScript (osascript); user values are passed as arguments so the engine is immune to AppleScript injection. The first run may trigger a one-time macOS automation permission prompt for the Reminders app.",
+  "author": "custom",
+  "license": "MIT",
+  "setup_args": {},
+  "examples": [
+    {
+      "prompt": "Show me my reminder lists",
+      "call": "{\"action\": \"lists\", \"list\": \"\", \"name\": \"\", \"id\": \"\", \"notes\": \"\", \"dueDate\": \"\", \"priority\": \"\", \"completed\": \"\", \"newName\": \"\", \"scope\": \"\", \"limit\": \"\"}"
+    },
+    {
+      "prompt": "What's on my Groceries list?",
+      "call": "{\"action\": \"get\", \"list\": \"Groceries\", \"name\": \"\", \"id\": \"\", \"notes\": \"\", \"dueDate\": \"\", \"priority\": \"\", \"completed\": \"\", \"newName\": \"\", \"scope\": \"incomplete\", \"limit\": \"\"}"
+    },
+    {
+      "prompt": "Add 'Buy milk' to my Groceries list, due tomorrow at 5pm, high priority",
+      "call": "{\"action\": \"create\", \"list\": \"Groceries\", \"name\": \"Buy milk\", \"id\": \"\", \"notes\": \"\", \"dueDate\": \"2026-06-23T17:00\", \"priority\": \"high\", \"completed\": \"\", \"newName\": \"\", \"scope\": \"\", \"limit\": \"\"}"
+    },
+    {
+      "prompt": "Mark 'Buy milk' on my Groceries list as done",
+      "call": "{\"action\": \"edit\", \"list\": \"Groceries\", \"name\": \"Buy milk\", \"id\": \"\", \"notes\": \"\", \"dueDate\": \"\", \"priority\": \"\", \"completed\": \"true\", \"newName\": \"\", \"scope\": \"\", \"limit\": \"\"}"
+    },
+    {
+      "prompt": "Rename 'Buy milk' to 'Buy oat milk' and add a note",
+      "call": "{\"action\": \"edit\", \"list\": \"Groceries\", \"name\": \"Buy milk\", \"id\": \"\", \"notes\": \"barista edition\", \"dueDate\": \"\", \"priority\": \"\", \"completed\": \"\", \"newName\": \"Buy oat milk\", \"scope\": \"\", \"limit\": \"\"}"
+    },
+    {
+      "prompt": "Delete the 'Buy oat milk' reminder from Groceries",
+      "call": "{\"action\": \"delete\", \"list\": \"Groceries\", \"name\": \"Buy oat milk\", \"id\": \"\", \"notes\": \"\", \"dueDate\": \"\", \"priority\": \"\", \"completed\": \"\", \"newName\": \"\", \"scope\": \"\", \"limit\": \"\"}"
+    }
+  ],
+  "entrypoint": {
+    "file": "handler.js",
+    "params": {
+      "action": {
+        "description": "Action to perform: 'lists' (list all reminder lists), 'get' (read reminders), 'create' (add a reminder), 'edit' (modify a reminder), or 'delete' (remove a reminder).",
+        "type": "string"
+      },
+      "list": {
+        "description": "Name of the reminder list. For 'get' it scopes the read (omit to read all lists). For 'create' it chooses the destination list (omit to use the default list). For 'edit'/'delete' it helps locate the target reminder by name.",
+        "type": "string"
+      },
+      "name": {
+        "description": "Reminder title. Required for 'create'. For 'edit'/'delete' it identifies the target reminder by title (combine with 'list' to disambiguate). Ignored when 'id' is provided.",
+        "type": "string"
+      },
+      "id": {
+        "description": "Exact reminder id (as returned by the 'get' action). When provided for 'edit'/'delete', it targets that specific reminder and 'name'/'list' are ignored. This is the most reliable way to target a reminder.",
+        "type": "string"
+      },
+      "notes": {
+        "description": "Notes/body text for the reminder. Used by 'create' and 'edit'. Empty string means 'leave unchanged' on edit.",
+        "type": "string"
+      },
+      "dueDate": {
+        "description": "Due date in ISO format: 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:MM' (24-hour, local time). If no time is given, 09:00 local is used. Used by 'create' and 'edit'. Note: the Reminders AppleScript API cannot remove an existing due date — you can only set a new one.",
+        "type": "string"
+      },
+      "priority": {
+        "description": "Priority: 'none', 'low', 'medium', or 'high'. Used by 'create' and 'edit'. Empty string means 'leave unchanged' on edit.",
+        "type": "string"
+      },
+      "completed": {
+        "description": "Boolean ('true'/'false'). For 'get' it filters by completion (overrides 'scope' when set). For 'edit' it marks the reminder complete/incomplete. Empty string means 'leave unchanged' on edit.",
+        "type": "string"
+      },
+      "newName": {
+        "description": "New title when renaming a reminder via 'edit'. Empty string means 'leave unchanged'.",
+        "type": "string"
+      },
+      "scope": {
+        "description": "For 'get': which reminders to return — 'incomplete' (default), 'completed', or 'all'.",
+        "type": "string"
+      },
+      "limit": {
+        "description": "For 'get': maximum number of reminders to return. Omit or 0 for no limit.",
+        "type": "string"
+      }
+    }
+  },
+  "imported": true
+}

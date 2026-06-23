@@ -1,0 +1,79 @@
+{
+  "active": true,
+  "hubId": "medium-draft-publisher",
+  "name": "Medium Draft Publisher",
+  "schema": "skill-1.0.0",
+  "version": "1.0.0",
+  "description": "Creates draft posts on Medium using the Medium API. Verifies the integration token and authenticated user, then creates a draft (or optionally public/unlisted) post on the user's profile or under a publication. Supports Markdown or HTML content, tags, and a canonical URL. Requires a Medium integration token (medium.com/me/settings).",
+  "author": "custom",
+  "license": "MIT",
+  "setup_args": {
+    "MEDIUM_API_TOKEN": {
+      "type": "string",
+      "required": true,
+      "default": "",
+      "input": {
+        "type": "text",
+        "default": "",
+        "placeholder": "Your Medium integration token",
+        "hint": "Generate one at https://medium.com/me/settings under 'Integration tokens'. Treat it like a password."
+      }
+    }
+  },
+  "examples": [
+    {
+      "prompt": "Verify my Medium token and show my account",
+      "call": "{\"action\": \"me\", \"title\": \"\", \"content\": \"\", \"contentFormat\": \"\", \"tags\": \"\", \"canonicalUrl\": \"\", \"publishStatus\": \"\", \"publicationId\": \"\"}"
+    },
+    {
+      "prompt": "Create a Medium draft titled 'Hello World' with the body 'My first draft.'",
+      "call": "{\"action\": \"draft\", \"title\": \"Hello World\", \"content\": \"My first draft.\", \"contentFormat\": \"markdown\", \"tags\": \"\", \"canonicalUrl\": \"\", \"publishStatus\": \"draft\", \"publicationId\": \"\"}"
+    },
+    {
+      "prompt": "Draft a Medium post titled 'Async in Node' in markdown tagged nodejs, javascript",
+      "call": "{\"action\": \"draft\", \"title\": \"Async in Node\", \"content\": \"# Async in Node\\n\\nEvent loop notes...\", \"contentFormat\": \"markdown\", \"tags\": \"nodejs, javascript\", \"canonicalUrl\": \"\", \"publishStatus\": \"draft\", \"publicationId\": \"\"}"
+    },
+    {
+      "prompt": "Save an HTML draft titled 'Release Notes' with a canonical URL to my blog",
+      "call": "{\"action\": \"draft\", \"title\": \"Release Notes\", \"content\": \"<h1>Release Notes</h1><p>v1.0 is out.</p>\", \"contentFormat\": \"html\", \"tags\": \"release\", \"canonicalUrl\": \"https://example.com/release-notes\", \"publishStatus\": \"draft\", \"publicationId\": \"\"}"
+    }
+  ],
+  "entrypoint": {
+    "file": "handler.js",
+    "params": {
+      "action": {
+        "description": "Action to perform: 'me' (verify the token and return the authenticated user) or 'draft' (create a post, draft by default).",
+        "type": "string"
+      },
+      "title": {
+        "description": "The post title. Required for action 'draft'. Used for SEO/listings; include it in 'content' too if you want it to appear in the post body. Titles longer than 100 characters are ignored by Medium.",
+        "type": "string"
+      },
+      "content": {
+        "description": "The post body. Required for action 'draft'. Interpreted according to 'contentFormat' (Markdown or HTML).",
+        "type": "string"
+      },
+      "contentFormat": {
+        "description": "Format of 'content': 'markdown' or 'html'. Defaults to 'markdown'.",
+        "type": "string"
+      },
+      "tags": {
+        "description": "Optional tags as a comma-separated string (e.g. 'nodejs, javascript') or an array. Only the first 3 are used by Medium; tags over 25 characters are ignored.",
+        "type": "string"
+      },
+      "canonicalUrl": {
+        "description": "Optional original URL of this content if it was first published elsewhere.",
+        "type": "string"
+      },
+      "publishStatus": {
+        "description": "Publish status: 'draft' (default), 'public', or 'unlisted'.",
+        "type": "string"
+      },
+      "publicationId": {
+        "description": "Optional publication ID to create the post under a publication instead of the user's profile.",
+        "type": "string"
+      }
+    }
+  },
+  "imported": true
+}
